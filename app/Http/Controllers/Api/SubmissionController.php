@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Application\UseCases\SubmitFormUseCase;
+use App\Application\Submission\UseCases\SubmitFormUseCase;
 use App\Domain\Exceptions\DomainValidationException;
 use App\Domain\Exceptions\FormNotFoundException;
 use App\Http\Controllers\Controller;

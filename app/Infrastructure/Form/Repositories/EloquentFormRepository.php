@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Repositories;
+namespace App\Infrastructure\Form\Repositories;
 
-use App\Domain\Entities\Field;
-use App\Domain\Entities\Form;
-use App\Domain\Repositories\FormRepositoryInterface;
-use App\Infrastructure\Persistence\Models\FieldModel;
-use App\Infrastructure\Persistence\Models\FormModel;
+use App\Domain\Form\Entities\Field;
+use App\Domain\Form\Entities\Form;
+use App\Domain\Form\Repositories\FormRepositoryInterface;
+use App\Infrastructure\Form\Models\FieldModel;
+use App\Infrastructure\Form\Models\FormModel;
 
 final class EloquentFormRepository implements FormRepositoryInterface
 {

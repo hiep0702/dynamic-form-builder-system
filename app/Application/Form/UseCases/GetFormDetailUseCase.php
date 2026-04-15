@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Application\UseCases;
+namespace App\Application\Form\UseCases;
 
 use App\Domain\Exceptions\FormNotFoundException;
-use App\Domain\Repositories\FormRepositoryInterface;
+use App\Domain\Form\Repositories\FormRepositoryInterface;
 
 final class GetFormDetailUseCase
 {

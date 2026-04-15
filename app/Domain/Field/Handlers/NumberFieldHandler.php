@@ -2,7 +2,7 @@
 
 namespace App\Domain\Field\Handlers;
 
-use App\Domain\Entities\Field;
+use App\Domain\Form\Entities\Field;
 use App\Domain\Field\FieldHandlerInterface;
 
 final class NumberFieldHandler implements FieldHandlerInterface

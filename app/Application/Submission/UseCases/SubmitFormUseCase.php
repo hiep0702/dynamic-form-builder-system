@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Application\UseCases;
+namespace App\Application\Submission\UseCases;
 
-use App\Domain\Entities\Submission;
-use App\Domain\Entities\Field;
+use App\Domain\Submission\Entities\Submission;
+use App\Domain\Form\Entities\Field;
 use App\Domain\Exceptions\DomainValidationException;
 use App\Domain\Exceptions\FormNotFoundException;
 use App\Domain\Field\FieldHandlerRegistry;
-use App\Domain\Repositories\FormRepositoryInterface;
-use App\Domain\Repositories\SubmissionRepositoryInterface;
+use App\Domain\Form\Repositories\FormRepositoryInterface;
+use App\Domain\Submission\Repositories\SubmissionRepositoryInterface;
 
 final class SubmitFormUseCase
 {
@@ -25,6 +25,10 @@ final class SubmitFormUseCase
 
         if ($form === null) {
             throw new FormNotFoundException('Form not found.');
+        }
+
+        if ($form->status() !== 'active') {
+            throw new DomainValidationException(['form' => ['Form is not active.']]);
         }
 
         $errors = [];

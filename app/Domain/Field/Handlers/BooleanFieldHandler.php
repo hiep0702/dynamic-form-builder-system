@@ -5,11 +5,11 @@ namespace App\Domain\Field\Handlers;
 use App\Domain\Form\Entities\Field;
 use App\Domain\Field\FieldHandlerInterface;
 
-final class TextFieldHandler implements FieldHandlerInterface
+final class BooleanFieldHandler implements FieldHandlerInterface
 {
     public function supports(string $type): bool
     {
-        return $type === Field::TYPE_TEXT;
+        return $type === Field::TYPE_BOOLEAN;
     }
 
     public function validate(mixed $value, Field $field): bool
@@ -18,11 +18,11 @@ final class TextFieldHandler implements FieldHandlerInterface
             return ! $field->required();
         }
 
-        return is_string($value);
+        return is_bool($value);
     }
 
     public function transform(mixed $value): mixed
     {
-        return $value === null ? null : trim((string) $value);
+        return $value === null ? null : (bool) $value;
     }
 }

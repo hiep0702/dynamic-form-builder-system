@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Repositories;
+namespace App\Domain\Submission\Repositories;
 
-use App\Domain\Entities\Submission;
+use App\Domain\Submission\Entities\Submission;
 
 interface SubmissionRepositoryInterface
 {

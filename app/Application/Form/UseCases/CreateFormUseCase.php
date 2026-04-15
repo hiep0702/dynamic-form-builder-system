@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\UseCases;
+namespace App\Application\Form\UseCases;
 
-use App\Domain\Entities\Field;
-use App\Domain\Entities\Form;
-use App\Domain\Repositories\FormRepositoryInterface;
+use App\Domain\Form\Entities\Field;
+use App\Domain\Form\Entities\Form;
+use App\Domain\Form\Repositories\FormRepositoryInterface;
 
 final class CreateFormUseCase
 {

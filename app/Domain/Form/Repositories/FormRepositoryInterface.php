@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Repositories;
+namespace App\Domain\Form\Repositories;
 
-use App\Domain\Entities\Form;
+use App\Domain\Form\Entities\Form;
 
 interface FormRepositoryInterface
 {

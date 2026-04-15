@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Repositories;
+namespace App\Infrastructure\Submission\Repositories;
 
-use App\Domain\Entities\Submission;
-use App\Domain\Repositories\SubmissionRepositoryInterface;
-use App\Infrastructure\Persistence\Models\SubmissionModel;
+use App\Domain\Submission\Entities\Submission;
+use App\Domain\Submission\Repositories\SubmissionRepositoryInterface;
+use App\Infrastructure\Submission\Models\SubmissionModel;
 
 final class EloquentSubmissionRepository implements SubmissionRepositoryInterface
 {

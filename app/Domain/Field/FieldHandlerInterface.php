@@ -2,7 +2,7 @@
 
 namespace App\Domain\Field;
 
-use App\Domain\Entities\Field;
+use App\Domain\Form\Entities\Field;
 
 interface FieldHandlerInterface
 {
