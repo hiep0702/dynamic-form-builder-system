@@ -18,7 +18,26 @@ final class DateFieldHandler implements FieldHandlerInterface
             return ! $field->required();
         }
 
-        return is_string($value) && strtotime($value) !== false;
+        if (!is_string($value)) {
+            return false;
+        }
+
+        $dateTime = \DateTime::createFromFormat($field->properties()['format'] ?? 'Y-m-d', $value);
+        if (!$dateTime) {
+            return false;
+        }
+
+        $minDate = $field->properties()['minDate'] ?? null;
+        $maxDate = $field->properties()['maxDate'] ?? null;
+
+        if ($minDate && $dateTime < new \DateTime($minDate)) {
+            return false;
+        }
+        if ($maxDate && $dateTime > new \DateTime($maxDate)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function transform(mixed $value): mixed

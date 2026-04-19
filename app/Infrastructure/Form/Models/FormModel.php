@@ -9,7 +9,7 @@ final class FormModel extends Model
 {
     protected $table = 'forms';
 
-    protected $fillable = ['title', 'status'];
+    protected $fillable = ['title', 'description', 'status'];
 
     public function fields(): HasMany
     {

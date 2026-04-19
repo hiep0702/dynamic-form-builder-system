@@ -2,25 +2,22 @@
 
 namespace App\Application\Form\UseCases;
 
-use App\Domain\Form\Entities\Field;
+use App\Application\Form\Commands\CreateFormCommand;
+use App\Application\Form\Factories\FormFactory;
 use App\Domain\Form\Entities\Form;
 use App\Domain\Form\Repositories\FormRepositoryInterface;
 
 final class CreateFormUseCase
 {
-    public function __construct(private FormRepositoryInterface $repository)
-    {
+    public function __construct(
+        private FormRepositoryInterface $repository,
+        private FormFactory $factory
+    ) {
     }
 
-    public function execute(string $title, string $status, array $fields): Form
+    public function execute(CreateFormCommand $command): Form
     {
-        $fieldObjects = array_map(fn(array $fieldData) => new Field(
-            null,
-            $fieldData['type'],
-            (bool) $fieldData['required'],
-        ), $fields);
-
-        $form = new Form(null, $title, $status, $fieldObjects);
+        $form = $this->factory->create($command);
 
         return $this->repository->save($form);
     }

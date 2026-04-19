@@ -5,11 +5,11 @@ namespace App\Domain\Field\Handlers;
 use App\Domain\Form\Entities\Field;
 use App\Domain\Field\FieldHandlerInterface;
 
-final class TextFieldHandler implements FieldHandlerInterface
+final class TextareaFieldHandler implements FieldHandlerInterface
 {
     public function supports(string $type): bool
     {
-        return $type === Field::TYPE_TEXT;
+        return $type === Field::TYPE_TEXTAREA;
     }
 
     public function validate(mixed $value, Field $field): bool
@@ -22,14 +22,8 @@ final class TextFieldHandler implements FieldHandlerInterface
             return false;
         }
 
-        $minLength = $field->properties()['minLength'] ?? null;
         $maxLength = $field->properties()['maxLength'] ?? null;
-
-        $length = strlen($value);
-        if ($minLength !== null && $length < $minLength) {
-            return false;
-        }
-        if ($maxLength !== null && $length > $maxLength) {
+        if ($maxLength !== null && strlen($value) > $maxLength) {
             return false;
         }
 
@@ -38,6 +32,6 @@ final class TextFieldHandler implements FieldHandlerInterface
 
     public function transform(mixed $value): mixed
     {
-        return $value === null ? null : trim((string) $value);
+        return $value;
     }
 }

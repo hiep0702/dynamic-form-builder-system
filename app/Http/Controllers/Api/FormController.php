@@ -6,6 +6,7 @@ use App\Application\Form\UseCases\CreateFormUseCase;
 use App\Application\Form\UseCases\UpdateFormUseCase;
 use App\Application\Form\UseCases\GetFormDetailUseCase;
 use App\Application\Form\UseCases\ListFormsUseCase;
+use App\Application\Form\UseCases\DeleteFormUseCase;
 use App\Domain\Exceptions\FormNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFormRequest;
@@ -23,9 +24,7 @@ final class FormController extends Controller
 
     public function store(StoreFormRequest $request, CreateFormUseCase $createUseCase): JsonResponse
     {
-        $data = $request->validated();
-
-        $form = $createUseCase->execute($data['title'], $data['status'], $data['fields']);
+        $form = $createUseCase->execute($request->toCommand());
 
         return response()->json(['data' => $form->toArray()], 201);
     }
@@ -43,12 +42,23 @@ final class FormController extends Controller
 
     public function update(int $id, UpdateFormRequest $request, UpdateFormUseCase $updateUseCase): JsonResponse
     {
-        $data = $request->validated();
+        $command = $request->toCommand($id);
 
         try {
-            $form = $updateUseCase->execute($id, $data['title'], $data['status'], $data['fields']);
+            $form = $updateUseCase->execute($command);
 
             return response()->json(['data' => $form->toArray()]);
+        } catch (FormNotFoundException $exception) {
+            return response()->json(['message' => $exception->getMessage()], 404);
+        }
+    }
+
+    public function destroy(int $id, DeleteFormUseCase $deleteUseCase): JsonResponse
+    {
+        try {
+            $deleteUseCase->execute($id);
+
+            return response()->json(['message' => 'Form deleted successfully']);
         } catch (FormNotFoundException $exception) {
             return response()->json(['message' => $exception->getMessage()], 404);
         }

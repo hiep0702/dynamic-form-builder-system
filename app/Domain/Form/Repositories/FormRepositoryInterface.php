@@ -11,4 +11,6 @@ interface FormRepositoryInterface
     public function find(int $id): ?Form;
 
     public function all(): array;
+
+    public function delete(int $id): void;
 }

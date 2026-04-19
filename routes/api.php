@@ -15,5 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('forms', FormController::class)->only(['index', 'store', 'show', 'update']);
+Route::apiResource('forms', FormController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 Route::post('forms/{id}/submit', [SubmissionController::class, 'submit']);

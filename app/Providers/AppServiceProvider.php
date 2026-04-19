@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Domain\Field\FieldHandlerRegistry;
-use App\Domain\Field\Handlers\NumberFieldHandler;
-use App\Domain\Field\Handlers\TextFieldHandler;
-use App\Domain\Field\Handlers\BooleanFieldHandler;
+use App\Domain\Field\Handlers\CheckboxFieldHandler;
 use App\Domain\Field\Handlers\DateFieldHandler;
+use App\Domain\Field\Handlers\FileFieldHandler;
+use App\Domain\Field\Handlers\NumberFieldHandler;
+use App\Domain\Field\Handlers\SelectFieldHandler;
+use App\Domain\Field\Handlers\TextareaFieldHandler;
+use App\Domain\Field\Handlers\TextFieldHandler;
 use App\Domain\Form\Repositories\FormRepositoryInterface;
 use App\Domain\Submission\Repositories\SubmissionRepositoryInterface;
 use App\Infrastructure\Form\Repositories\EloquentFormRepository;
@@ -27,8 +30,11 @@ class AppServiceProvider extends ServiceProvider
             return new FieldHandlerRegistry([
                 new TextFieldHandler(),
                 new NumberFieldHandler(),
-                new BooleanFieldHandler(),
+                new CheckboxFieldHandler(),
                 new DateFieldHandler(),
+                new SelectFieldHandler(),
+                new TextareaFieldHandler(),
+                new FileFieldHandler(),
             ]);
         });
     }
