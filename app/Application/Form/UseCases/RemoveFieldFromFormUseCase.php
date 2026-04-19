@@ -19,14 +19,7 @@ final class RemoveFieldFromFormUseCase
             throw new FormNotFoundException("Form with id {$formId} not found");
         }
 
-        $fields = array_filter($form->fields(), fn($field) => $field->id() !== $fieldId);
-
-        $updatedForm = new Form(
-            $form->id(),
-            $form->title(),
-            $form->status(),
-            array_values($fields)
-        );
+        $updatedForm = $form->removeField($fieldId);
 
         return $this->repository->save($updatedForm);
     }

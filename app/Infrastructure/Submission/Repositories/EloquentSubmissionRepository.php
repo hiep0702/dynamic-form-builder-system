@@ -15,6 +15,7 @@ final class EloquentSubmissionRepository implements SubmissionRepositoryInterfac
         $model->payload = $submission->payload();
         $model->schema_version = $submission->schemaVersion();
         $model->schema_snapshot = $submission->schemaSnapshot();
+        $model->status = $submission->status();
         $model->save();
 
         return new Submission(
@@ -23,6 +24,32 @@ final class EloquentSubmissionRepository implements SubmissionRepositoryInterfac
             $model->payload,
             $model->schema_version,
             $model->schema_snapshot,
+            $model->status,
+            $model->created_at ? new \DateTimeImmutable($model->created_at) : null,
+        );
+    }
+
+    public function find(int $id): ?Submission
+    {
+        $model = SubmissionModel::find($id);
+
+        return $model ? $this->mapToEntity($model) : null;
+    }
+
+    public function all(): array
+    {
+        return SubmissionModel::all()->map(fn(SubmissionModel $submission) => $this->mapToEntity($submission))->all();
+    }
+
+    private function mapToEntity(SubmissionModel $model): Submission
+    {
+        return new Submission(
+            $model->id,
+            $model->form_id,
+            $model->payload,
+            $model->schema_version,
+            $model->schema_snapshot,
+            $model->status,
             $model->created_at ? new \DateTimeImmutable($model->created_at) : null,
         );
     }

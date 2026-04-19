@@ -49,6 +49,11 @@ final class EloquentFormRepository implements FormRepositoryInterface
         return FormModel::with('fields')->get()->map(fn(FormModel $form) => $this->mapToEntity($form))->all();
     }
 
+    public function findActive(): array
+    {
+        return FormModel::with('fields')->where('status', 'active')->get()->map(fn(FormModel $form) => $this->mapToEntity($form))->all();
+    }
+
     public function delete(int $id): void
     {
         FormModel::findOrFail($id)->delete();

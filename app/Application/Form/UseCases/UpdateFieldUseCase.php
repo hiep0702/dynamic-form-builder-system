@@ -20,20 +20,8 @@ final class UpdateFieldUseCase
             throw new FormNotFoundException("Form with id {$formId} not found");
         }
 
-        $fields = $form->fields();
-        $updatedFields = array_map(function (Field $field) use ($fieldId, $fieldData) {
-            if ($field->id() === $fieldId) {
-                return Field::fromArray(array_merge($field->toArray(), $fieldData, ['id' => $fieldId]));
-            }
-            return $field;
-        }, $fields);
-
-        $updatedForm = new Form(
-            $form->id(),
-            $form->title(),
-            $form->status(),
-            $updatedFields
-        );
+        $field = Field::fromArray(array_merge($fieldData, ['id' => $fieldId]));
+        $updatedForm = $form->updateField($fieldId, $field);
 
         return $this->repository->save($updatedForm);
     }

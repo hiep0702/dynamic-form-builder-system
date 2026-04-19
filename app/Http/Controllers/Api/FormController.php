@@ -7,11 +7,17 @@ use App\Application\Form\UseCases\UpdateFormUseCase;
 use App\Application\Form\UseCases\GetFormDetailUseCase;
 use App\Application\Form\UseCases\ListFormsUseCase;
 use App\Application\Form\UseCases\DeleteFormUseCase;
+use App\Application\Form\UseCases\AddFieldToFormUseCase;
+use App\Application\Form\UseCases\UpdateFieldUseCase;
+use App\Application\Form\UseCases\RemoveFieldFromFormUseCase;
+use App\Application\Form\UseCases\ListActiveFormsUseCase;
+use App\Application\Form\UseCases\GetActiveFormDetailUseCase;
 use App\Domain\Exceptions\FormNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFormRequest;
 use App\Http\Requests\UpdateFormRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 final class FormController extends Controller
 {
@@ -59,6 +65,57 @@ final class FormController extends Controller
             $deleteUseCase->execute($id);
 
             return response()->json(['message' => 'Form deleted successfully']);
+        } catch (FormNotFoundException $exception) {
+            return response()->json(['message' => $exception->getMessage()], 404);
+        }
+    }
+
+    public function addField(int $id, Request $request, AddFieldToFormUseCase $addFieldUseCase): JsonResponse
+    {
+        try {
+            $form = $addFieldUseCase->execute($id, $request->all());
+
+            return response()->json(['data' => $form->toArray()]);
+        } catch (FormNotFoundException $exception) {
+            return response()->json(['message' => $exception->getMessage()], 404);
+        }
+    }
+
+    public function updateField(int $formId, int $fieldId, Request $request, UpdateFieldUseCase $updateFieldUseCase): JsonResponse
+    {
+        try {
+            $form = $updateFieldUseCase->execute($formId, $fieldId, $request->all());
+
+            return response()->json(['data' => $form->toArray()]);
+        } catch (FormNotFoundException $exception) {
+            return response()->json(['message' => $exception->getMessage()], 404);
+        }
+    }
+
+    public function removeField(int $formId, int $fieldId, RemoveFieldFromFormUseCase $removeFieldUseCase): JsonResponse
+    {
+        try {
+            $form = $removeFieldUseCase->execute($formId, $fieldId);
+
+            return response()->json(['data' => $form->toArray()]);
+        } catch (FormNotFoundException $exception) {
+            return response()->json(['message' => $exception->getMessage()], 404);
+        }
+    }
+
+    public function activeForms(ListActiveFormsUseCase $listActiveUseCase): JsonResponse
+    {
+        $forms = array_map(fn($form) => $form->toArray(), $listActiveUseCase->execute());
+
+        return response()->json(['data' => $forms]);
+    }
+
+    public function activeFormDetail(int $id, GetActiveFormDetailUseCase $getActiveUseCase): JsonResponse
+    {
+        try {
+            $form = $getActiveUseCase->execute($id);
+
+            return response()->json(['data' => $form->toArray()]);
         } catch (FormNotFoundException $exception) {
             return response()->json(['message' => $exception->getMessage()], 404);
         }

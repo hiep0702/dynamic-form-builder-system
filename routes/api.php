@@ -16,4 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('forms', FormController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+Route::post('forms/{id}/fields', [FormController::class, 'addField']);
+Route::put('forms/{id}/fields/{fieldId}', [FormController::class, 'updateField']);
+Route::delete('forms/{id}/fields/{fieldId}', [FormController::class, 'removeField']);
+Route::get('forms/active', [FormController::class, 'activeForms']);
+Route::get('forms/active/{id}', [FormController::class, 'activeFormDetail']);
 Route::post('forms/{id}/submit', [SubmissionController::class, 'submit']);
+Route::apiResource('submissions', SubmissionController::class)->only(['index', 'show']);

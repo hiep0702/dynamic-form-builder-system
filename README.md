@@ -1,66 +1,308 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dynamic Form Builder System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A scalable dynamic form builder system built with Laravel using Domain-Driven Design (DDD) architecture. Supports extensible field types, schema versioning, and asynchronous processing with queue system.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Dynamic Form Creation**: Create forms with various field types (text, number, date, select, checkbox, textarea, file)
+- **Field Management**: Add, update, and remove fields from forms
+- **Schema Versioning**: Automatic version tracking to maintain submission integrity
+- **Asynchronous Processing**: Queue-based submission processing with status tracking
+- **RESTful API**: Complete API for form management and submissions
+- **DDD Architecture**: Clean separation of concerns with Domain, Application, and Infrastructure layers
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Architecture Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Layered Architecture (DDD)
 
-## Learning Laravel
+```
+├── Domain Layer
+│   ├── Entities (Form, Field, Submission)
+│   ├── Value Objects (FormStatus, SubmissionStatus, FieldType)
+│   ├── Repositories (Interfaces)
+│   └── Services (Field Handlers)
+├── Application Layer
+│   ├── Use Cases (Business Logic)
+│   ├── Commands (DTOs)
+│   └── Factories
+├── Infrastructure Layer
+│   ├── Repositories (Eloquent Implementations)
+│   ├── Models (Eloquent ORM)
+│   └── External Services
+└── Presentation Layer
+    ├── Controllers (API)
+    ├── Requests (Validation)
+    └── Routes
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Key Components
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Aggregate Root**: Form entity manages fields and versioning
+- **Value Objects**: Immutable objects for status and types
+- **Use Cases**: Application services handling business logic
+- **Repository Pattern**: Abstraction over data persistence
+- **Queue System**: Asynchronous job processing for submissions
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+### Prerequisites
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.1 or higher
+- Composer
+- Node.js & NPM (for frontend assets)
+- MySQL/PostgreSQL database
 
-### Premium Partners
+### Steps
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd dynamic-form-builder-system
+   ```
 
-## Contributing
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
 
-## Code of Conduct
+4. **Environment Configuration**
+   ```bash
+   cp .env.example .env
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Update `.env` file with your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=dynamic_forms
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
 
-## Security Vulnerabilities
+   QUEUE_CONNECTION=database
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+
+## Database Setup
+
+1. **Create database**
+   ```sql
+   CREATE DATABASE dynamic_forms;
+   ```
+
+2. **Run migrations**
+   ```bash
+   php artisan migrate
+   ```
+
+3. **Seed database (optional)**
+   ```bash
+   php artisan db:seed
+   ```
+
+## Running the Project
+
+### Development Server
+
+1. **Start Laravel development server**
+   ```bash
+   php artisan serve
+   ```
+
+   Server will be available at `http://localhost:8000`
+
+2. **Build frontend assets (if needed)**
+   ```bash
+   npm run dev
+   ```
+
+### Queue Worker
+
+The system uses queues for asynchronous submission processing. Start the queue worker:
+
+```bash
+php artisan queue:work
+```
+
+For production, consider using a process manager like Supervisor to keep the worker running.
+
+### Alternative: Using Docker
+
+If you prefer Docker:
+
+```bash
+# Build and run with Docker Compose
+docker-compose up -d
+
+# Run migrations in container
+docker-compose exec app php artisan migrate
+```
+
+## API Testing
+
+### Available Endpoints
+
+#### Form Management
+- `GET /api/forms` - List all forms
+- `POST /api/forms` - Create new form
+- `GET /api/forms/{id}` - Get form details
+- `PUT /api/forms/{id}` - Update form
+- `DELETE /api/forms/{id}` - Delete form
+
+#### Field Management
+- `POST /api/forms/{id}/fields` - Add field to form
+- `PUT /api/forms/{id}/fields/{fieldId}` - Update field
+- `DELETE /api/forms/{id}/fields/{fieldId}` - Remove field
+
+#### Public APIs
+- `GET /api/forms/active` - List active forms
+- `GET /api/forms/active/{id}` - Get active form schema
+- `POST /api/forms/{id}/submit` - Submit form data
+- `GET /api/submissions` - List submissions
+- `GET /api/submissions/{id}` - Get submission details
+
+### Testing with cURL
+
+#### Create a Form
+```bash
+curl -X POST http://localhost:8000/api/forms \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Contact Form",
+    "description": "A simple contact form",
+    "status": "active",
+    "fields": [
+      {
+        "type": "text",
+        "label": "Name",
+        "required": true
+      },
+      {
+        "type": "email",
+        "label": "Email",
+        "required": true
+      }
+    ]
+  }'
+```
+
+#### Submit Form Data
+```bash
+curl -X POST http://localhost:8000/api/forms/1/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "field_0": "John Doe",
+    "field_1": "john@example.com"
+  }'
+```
+
+#### Check Submission Status
+```bash
+curl http://localhost:8000/api/submissions/1
+```
+
+### Using Postman/Insomnia
+
+Import the following collection structure:
+
+```
+Dynamic Form Builder API
+├── Forms
+│   ├── List Forms
+│   ├── Create Form
+│   ├── Get Form
+│   ├── Update Form
+│   └── Delete Form
+├── Fields
+│   ├── Add Field
+│   ├── Update Field
+│   └── Remove Field
+├── Public
+│   ├── List Active Forms
+│   ├── Get Active Form Schema
+│   └── Submit Form
+└── Submissions
+    ├── List Submissions
+    └── Get Submission
+```
+
+## Trade-offs and Assumptions
+
+### Architecture Decisions
+
+1. **DDD Implementation**
+   - **Trade-off**: More complex structure vs. maintainability
+   - **Assumption**: Team has experience with DDD patterns
+
+2. **Schema Versioning**
+   - **Trade-off**: Storage overhead vs. data integrity
+   - **Assumption**: Form schemas change frequently, submissions need historical context
+
+3. **Queue Processing**
+   - **Trade-off**: Delayed response vs. system scalability
+   - **Assumption**: Submission processing may involve heavy operations (file uploads, integrations)
+
+### Technical Assumptions
+
+1. **Database Choice**: MySQL/PostgreSQL with JSON column support for flexible field properties
+2. **Queue Driver**: Database queues for simplicity (can be changed to Redis for production)
+3. **Field Types**: Extensible through FieldHandler pattern
+4. **Validation**: Client-side validation assumed, server-side validation per field type
+5. **Authentication**: Not implemented (can be added with Laravel Sanctum/Passport)
+6. **File Uploads**: Basic support, no advanced file processing (resize, convert)
+
+### Performance Considerations
+
+- **Indexing**: Consider adding indexes on frequently queried columns (status, created_at)
+- **Caching**: Form schemas can be cached for better performance
+- **Pagination**: API responses should be paginated for large datasets
+- **Rate Limiting**: Consider implementing rate limiting for submission endpoints
+
+### Security Notes
+
+- Input validation implemented per field type
+- CSRF protection enabled by default
+- Consider adding API authentication for production use
+- File upload validation should be enhanced for security
+
+## Development
+
+### Running Tests
+
+```bash
+# Run PHP tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Code Quality
+
+```bash
+# Run PHPStan
+./vendor/bin/phpstan analyse
+
+# Run Laravel Pint
+./vendor/bin/pint
+```
+
+### Contributing
+
+1. Follow PSR-12 coding standards
+2. Write tests for new features
+3. Update documentation
+4. Use meaningful commit messages
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.

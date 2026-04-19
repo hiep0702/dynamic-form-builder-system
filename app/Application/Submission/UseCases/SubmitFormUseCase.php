@@ -9,6 +9,9 @@ use App\Domain\Exceptions\FormNotFoundException;
 use App\Domain\Field\FieldHandlerRegistry;
 use App\Domain\Form\Repositories\FormRepositoryInterface;
 use App\Domain\Submission\Repositories\SubmissionRepositoryInterface;
+use App\Domain\Submission\ValueObjects\SubmissionStatus;
+use App\Jobs\ProcessSubmissionJob;
+use Illuminate\Support\Facades\Bus;
 
 final class SubmitFormUseCase
 {
@@ -64,9 +67,14 @@ final class SubmitFormUseCase
             $values,
             $form->version(),
             $form->schemaSnapshot(),
+            SubmissionStatus::QUEUED,
             null
         );
 
-        return $this->submissionRepository->save($submission);
+        $savedSubmission = $this->submissionRepository->save($submission);
+
+        Bus::dispatch(new ProcessSubmissionJob($savedSubmission));
+
+        return $savedSubmission;
     }
 }

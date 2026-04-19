@@ -21,15 +21,7 @@ final class AddFieldToFormUseCase
         }
 
         $field = Field::fromArray($fieldData);
-        $fields = $form->fields();
-        $fields[] = $field;
-
-        $updatedForm = new Form(
-            $form->id(),
-            $form->title(),
-            $form->status(),
-            $fields
-        );
+        $updatedForm = $form->addField($field);
 
         return $this->repository->save($updatedForm);
     }

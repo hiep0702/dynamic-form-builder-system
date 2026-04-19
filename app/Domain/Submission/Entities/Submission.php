@@ -2,6 +2,8 @@
 
 namespace App\Domain\Submission\Entities;
 
+use App\Domain\Submission\ValueObjects\SubmissionStatus;
+
 final class Submission
 {
     public function __construct(
@@ -10,6 +12,7 @@ final class Submission
         private array $payload,
         private int $schemaVersion,
         private array $schemaSnapshot,
+        private SubmissionStatus $status,
         private ?\DateTimeImmutable $createdAt = null
     ) {
     }
@@ -39,6 +42,11 @@ final class Submission
         return $this->schemaSnapshot;
     }
 
+    public function status(): SubmissionStatus
+    {
+        return $this->status;
+    }
+
     public function createdAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -52,6 +60,7 @@ final class Submission
             'payload' => $this->payload,
             'schema_version' => $this->schemaVersion,
             'schema_snapshot' => $this->schemaSnapshot,
+            'status' => $this->status->value,
             'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
         ];
     }

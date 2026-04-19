@@ -86,7 +86,7 @@ final class Form
         $fields = $this->fields;
         $fields[] = $field;
 
-        return new self($this->id, $this->title, $this->description, $this->status, $this->version, $fields);
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version + 1, $fields);
     }
 
     public function updateField(int $fieldId, Field $field): self
@@ -96,14 +96,14 @@ final class Form
             $this->fields
         );
 
-        return new self($this->id, $this->title, $this->description, $this->status, $this->version, $fields);
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version + 1, $fields);
     }
 
     public function removeField(int $fieldId): self
     {
         $fields = array_filter($this->fields, fn(Field $existing) => $existing->id() !== $fieldId);
 
-        return new self($this->id, $this->title, $this->description, $this->status, $this->version, array_values($fields));
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version + 1, array_values($fields));
     }
 
     public function toArray(): array
