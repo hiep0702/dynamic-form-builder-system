@@ -8,9 +8,10 @@ final class SubmissionModel extends Model
 {
     protected $table = 'submissions';
 
-    protected $fillable = ['form_id', 'payload'];
+    protected $fillable = ['form_id', 'payload', 'schema_version', 'schema_snapshot'];
 
     protected $casts = [
         'payload' => 'array',
+        'schema_snapshot' => 'array',
     ];
 }

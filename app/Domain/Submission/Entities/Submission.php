@@ -8,6 +8,8 @@ final class Submission
         private ?int $id,
         private int $formId,
         private array $payload,
+        private int $schemaVersion,
+        private array $schemaSnapshot,
         private ?\DateTimeImmutable $createdAt = null
     ) {
     }
@@ -27,6 +29,16 @@ final class Submission
         return $this->payload;
     }
 
+    public function schemaVersion(): int
+    {
+        return $this->schemaVersion;
+    }
+
+    public function schemaSnapshot(): array
+    {
+        return $this->schemaSnapshot;
+    }
+
     public function createdAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -38,6 +50,8 @@ final class Submission
             'id' => $this->id,
             'form_id' => $this->formId,
             'payload' => $this->payload,
+            'schema_version' => $this->schemaVersion,
+            'schema_snapshot' => $this->schemaSnapshot,
             'created_at' => $this->createdAt?->format('Y-m-d H:i:s'),
         ];
     }

@@ -19,6 +19,7 @@ final class FormFactory
             $command->title,
             $command->description ?? '',
             FormStatus::fromString($command->status),
+            1,
             $fields,
         );
     }
@@ -31,6 +32,7 @@ final class FormFactory
             ->withTitle($command->title)
             ->withDescription($command->description ?? '')
             ->withStatus(FormStatus::fromString($command->status))
-            ->withFields($fields);
+            ->withFields($fields)
+            ->incrementVersion();
     }
 }

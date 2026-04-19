@@ -9,7 +9,11 @@ final class FormModel extends Model
 {
     protected $table = 'forms';
 
-    protected $fillable = ['title', 'description', 'status'];
+    protected $fillable = ['title', 'description', 'status', 'schema_version'];
+
+    protected $casts = [
+        'schema_version' => 'integer',
+    ];
 
     public function fields(): HasMany
     {

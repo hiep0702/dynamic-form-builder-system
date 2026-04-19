@@ -13,12 +13,16 @@ final class EloquentSubmissionRepository implements SubmissionRepositoryInterfac
         $model = new SubmissionModel();
         $model->form_id = $submission->formId();
         $model->payload = $submission->payload();
+        $model->schema_version = $submission->schemaVersion();
+        $model->schema_snapshot = $submission->schemaSnapshot();
         $model->save();
 
         return new Submission(
             $model->id,
             $model->form_id,
             $model->payload,
+            $model->schema_version,
+            $model->schema_snapshot,
             $model->created_at ? new \DateTimeImmutable($model->created_at) : null,
         );
     }

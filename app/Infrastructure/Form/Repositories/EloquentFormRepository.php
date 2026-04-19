@@ -18,6 +18,7 @@ final class EloquentFormRepository implements FormRepositoryInterface
         $model->title = $form->title();
         $model->description = $form->description();
         $model->status = $form->status();
+        $model->schema_version = $form->version();
         $model->save();
 
         $model->fields()->delete();
@@ -70,6 +71,7 @@ final class EloquentFormRepository implements FormRepositoryInterface
             $model->title,
             $model->description,
             FormStatus::fromString($model->status),
+            $model->schema_version ?? 1,
             $fields,
         );
     }

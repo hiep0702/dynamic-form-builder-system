@@ -11,6 +11,7 @@ final class Form
         private string $title,
         private string $description,
         private FormStatus $status,
+        private int $version,
         private array $fields = []
     ) {
     }
@@ -45,24 +46,39 @@ final class Form
         return $this->fields;
     }
 
+    public function version(): int
+    {
+        return $this->version;
+    }
+
     public function withTitle(string $title): self
     {
-        return new self($this->id, $title, $this->description, $this->status, $this->fields);
+        return new self($this->id, $title, $this->description, $this->status, $this->version, $this->fields);
     }
 
     public function withDescription(string $description): self
     {
-        return new self($this->id, $this->title, $description, $this->status, $this->fields);
+        return new self($this->id, $this->title, $description, $this->status, $this->version, $this->fields);
     }
 
     public function withStatus(FormStatus $status): self
     {
-        return new self($this->id, $this->title, $this->description, $status, $this->fields);
+        return new self($this->id, $this->title, $this->description, $status, $this->version, $this->fields);
     }
 
     public function withFields(array $fields): self
     {
-        return new self($this->id, $this->title, $this->description, $this->status, $fields);
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version, $fields);
+    }
+
+    public function withVersion(int $version): self
+    {
+        return new self($this->id, $this->title, $this->description, $this->status, $version, $this->fields);
+    }
+
+    public function incrementVersion(): self
+    {
+        return $this->withVersion($this->version + 1);
     }
 
     public function addField(Field $field): self
@@ -70,7 +86,7 @@ final class Form
         $fields = $this->fields;
         $fields[] = $field;
 
-        return new self($this->id, $this->title, $this->description, $this->status, $fields);
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version, $fields);
     }
 
     public function updateField(int $fieldId, Field $field): self
@@ -80,14 +96,14 @@ final class Form
             $this->fields
         );
 
-        return new self($this->id, $this->title, $this->description, $this->status, $fields);
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version, $fields);
     }
 
     public function removeField(int $fieldId): self
     {
         $fields = array_filter($this->fields, fn(Field $existing) => $existing->id() !== $fieldId);
 
-        return new self($this->id, $this->title, $this->description, $this->status, array_values($fields));
+        return new self($this->id, $this->title, $this->description, $this->status, $this->version, array_values($fields));
     }
 
     public function toArray(): array
@@ -97,6 +113,7 @@ final class Form
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status->value(),
+            'version' => $this->version,
             'fields' => array_map(fn(Field $field) => $field->toArray(), $this->fields),
         ];
     }
@@ -110,7 +127,20 @@ final class Form
             $data['title'],
             $data['description'] ?? '',
             FormStatus::fromString($data['status']),
+            $data['version'] ?? 1,
             $fields,
         );
+    }
+
+    public function schemaSnapshot(): array
+    {
+        return [
+            'form_id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'status' => $this->status->value(),
+            'version' => $this->version,
+            'fields' => array_map(fn(Field $field) => $field->toArray(), $this->fields),
+        ];
     }
 }

@@ -58,7 +58,14 @@ final class SubmitFormUseCase
             throw new DomainValidationException($errors);
         }
 
-        $submission = new Submission(null, $formId, $values, null);
+        $submission = new Submission(
+            null,
+            $formId,
+            $values,
+            $form->version(),
+            $form->schemaSnapshot(),
+            null
+        );
 
         return $this->submissionRepository->save($submission);
     }
